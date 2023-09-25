@@ -1,40 +1,51 @@
 import pennylane as qml
 
-dev = qml.device("default.qubit", wires=4)
+dev = qml.device("default.qubit", wires=4) 
 
 @qml.qnode(dev)
 def prime_decompose(number):
     """Decompose number into two prime addends"""
-    
-    qml.Hadamard(wires=0)
+
+    # Initialize qubits in equal superposition 
+    qml.Hadamard(wires=0)  
     qml.Hadamard(wires=1)
     
-    qml.RY(2 * number / np.pi, wires=2)
+    # Encode number in rotation on ancilla qubit
+    qml.RY(2 * number / np.pi, wires=2)  
+    
+    # Entangle data qubits with ancilla 
     qml.CNOT(wires=[2, 0])
     qml.CNOT(wires=[2, 1])
     
+    # Amplify amplitudes of solution states
     qml.Hadamard(wires=0)
     qml.Hadamard(wires=1)
-    
+
+    # Measure data qubits 
     return qml.expval(qml.PauliZ(0)), qml.expval(qml.PauliZ(1))
 
 def find_primes(number):
     """Find decomposing prime numbers"""
     
     results = prime_decompose(number)
-    
+
+    # Decode measurement results
     if results[0] == 1:
-        prime1 = 2
+        prime1 = 2 
     else:
         prime1 = 3
-    
+
     if results[1] == 1:
         prime2 = 2
     else:
         prime2 = 3
-    
+
     return prime1, prime2
 
-number = 18
+# Test on example input
+number = 18  
 primes = find_primes(number)
 print(primes)
+
+# Verify primes sum to number
+print(primes[0] + primes[1] == number)
