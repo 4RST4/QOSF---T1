@@ -1,0 +1,48 @@
+import React, { useState } from 'react';
+import AudioPlayer from './AudioPlayer';  // Assuming AudioPlayer is in the same directory
+import { Button } from '@/components/ui/button';
+
+const mockArticles = [
+  {
+    title: "The Future of Artificial Intelligence",
+    content: "Artificial Intelligence (AI) is rapidly evolving, promising to revolutionize various aspects of our lives. From self-driving cars to advanced medical diagnostics, AI is opening up new possibilities we once thought were confined to science fiction. However, as AI becomes more prevalent, it also raises important ethical questions that society must address. How do we ensure AI is used responsibly? What safeguards should be in place to protect privacy and prevent misuse? As we stand on the brink of this technological revolution, it's crucial that we carefully consider both the potential benefits and risks of AI."
+  },
+  {
+    title: "The Importance of Sustainable Living",
+    content: "Sustainable living has become more than just a trend; it's a necessity for the future of our planet. As climate change continues to impact our environment, adopting sustainable practices in our daily lives is crucial. This includes reducing our carbon footprint, minimizing waste, and supporting eco-friendly products and services. Simple changes, such as using reusable bags, conserving water, and choosing energy-efficient appliances, can make a significant difference when adopted on a large scale. By embracing sustainable living, we not only protect our environment but also often improve our quality of life and save money in the long run."
+  },
+  {
+    title: "The Benefits of Regular Exercise",
+    content: "Regular exercise is a cornerstone of a healthy lifestyle, offering numerous benefits for both physical and mental well-being. Physically, exercise helps maintain a healthy weight, strengthens muscles and bones, and reduces the risk of chronic diseases such as heart disease and diabetes. Mentally, it can alleviate stress, improve mood, and boost cognitive function. Even moderate amounts of exercise, such as a daily 30-minute walk, can have significant positive impacts on health. The key is to find activities you enjoy and make them a consistent part of your routine. Remember, it's never too late to start reaping the benefits of regular exercise."
+  }
+];
+
+const AudioPlayerDemo = () => {
+  const [currentArticleIndex, setCurrentArticleIndex] = useState(0);
+
+  const nextArticle = () => {
+    setCurrentArticleIndex((prevIndex) => (prevIndex + 1) % mockArticles.length);
+  };
+
+  const prevArticle = () => {
+    setCurrentArticleIndex((prevIndex) => (prevIndex - 1 + mockArticles.length) % mockArticles.length);
+  };
+
+  const currentArticle = mockArticles[currentArticleIndex];
+
+  return (
+    <div className="max-w-2xl mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">{currentArticle.title}</h1>
+      <div className="flex justify-between mb-4">
+        <Button onClick={prevArticle}>Previous Article</Button>
+        <Button onClick={nextArticle}>Next Article</Button>
+      </div>
+      <AudioPlayer articleText={currentArticle.content} />
+      <div className="mt-4 prose">
+        <p>{currentArticle.content}</p>
+      </div>
+    </div>
+  );
+};
+
+export default AudioPlayerDemo;
